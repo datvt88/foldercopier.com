@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import NavBar from '@/components/NavBar';
-import Footer from '@/components/Footer';
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
 import './globals.css';
 
 export const metadata: Metadata = {
