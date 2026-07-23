@@ -66,85 +66,72 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [taskId, backendUrl]);
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    'name': 'FolderCopier',
-    'applicationCategory': 'UtilitiesApplication',
-    'operatingSystem': 'Web',
-    'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
-  };
-
   return (
-    <>
-      <Script id="schema-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="max-w-4xl mx-auto px-4 py-20 sm:px-6 lg:px-8 space-y-16">
-        
-        <header className="text-center space-y-6">
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
-            Your Drive, Cloned. <br className="hidden md:block" /> 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Made easy.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-medium">
-            One platform, powered by our backend API, to clone entire nested directories seamlessly across your Google accounts.
-          </p>
-        </header>
+    <div className="max-w-5xl mx-auto px-4 py-16 sm:py-24 lg:px-8 space-y-16">
+      <header className="text-center space-y-8">
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
+          Your Drive, Cloned. <br className="hidden md:block" /> 
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Made easy.</span>
+        </h1>
+        <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto font-medium">
+          One platform, powered by our backend API, to clone entire nested directories seamlessly across your Google accounts.
+        </p>
+      </header>
 
-        <section className="bg-white/5 backdrop-blur-2xl p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-white/10 relative overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[150%] bg-purple-500/10 blur-[120px] pointer-events-none"></div>
+      <section className="bg-white/5 backdrop-blur-2xl p-8 md:p-14 rounded-[2.5rem] shadow-2xl border border-white/10 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[150%] bg-purple-500/10 blur-[120px] pointer-events-none"></div>
 
-          <div className="space-y-6 relative z-10">
-            <div>
-              <label className="block text-sm font-semibold text-slate-200 mb-2">Source Folder URL</label>
-              <input 
-                type="text"
-                className="w-full bg-black/30 border border-white/10 text-white placeholder-slate-500 p-4 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all text-sm backdrop-blur-sm"
-                placeholder="https://drive.google.com/drive/folders/..." 
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                disabled={isProcessing}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-200 mb-2">Destination Folder URL</label>
-              <input 
-                type="text"
-                className="w-full bg-black/30 border border-white/10 text-white placeholder-slate-500 p-4 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all text-sm backdrop-blur-sm"
-                placeholder="https://drive.google.com/drive/folders/..." 
-                value={dest}
-                onChange={(e) => setDest(e.target.value)}
-                disabled={isProcessing}
-              />
-            </div>
-
-            <button 
-              onClick={() => login()}
-              disabled={!source || !dest || isProcessing}
-              className="w-full bg-white text-slate-900 hover:bg-slate-200 hover:scale-[1.02] active:scale-[0.98] font-bold text-lg py-4 px-6 rounded-2xl transition-all disabled:bg-white/20 disabled:text-white/40 disabled:hover:scale-100 disabled:cursor-not-allowed mt-4 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
-            >
-              {isProcessing ? 'Processing Request...' : 'Get started'}
-            </button>
-            
-            <div className="flex items-center justify-center gap-2 text-sm text-slate-400 font-medium pt-3">
-              <svg width="16" height="16" className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              Secure OAuth 2.0 connection
-            </div>
+        <div className="space-y-8 relative z-10">
+          <div>
+            <label className="block text-lg font-semibold text-slate-200 mb-3">Source Folder URL</label>
+            <input 
+              type="text"
+              className="w-full bg-black/40 border border-white/20 text-white placeholder-slate-500 p-5 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all text-lg md:text-xl backdrop-blur-sm shadow-inner"
+              placeholder="https://drive.google.com/drive/folders/..." 
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              disabled={isProcessing}
+            />
+          </div>
+          <div>
+            <label className="block text-lg font-semibold text-slate-200 mb-3">Destination Folder URL</label>
+            <input 
+              type="text"
+              className="w-full bg-black/40 border border-white/20 text-white placeholder-slate-500 p-5 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all text-lg md:text-xl backdrop-blur-sm shadow-inner"
+              placeholder="https://drive.google.com/drive/folders/..." 
+              value={dest}
+              onChange={(e) => setDest(e.target.value)}
+              disabled={isProcessing}
+            />
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/10 relative z-10">
-            <div className="flex justify-between text-xs font-semibold text-slate-400 mb-3 uppercase tracking-wider">
-              <span>Status: <span className="text-white font-bold">{statusMessage}</span></span>
-              {isProcessing && <span>{progress}%</span>}
-            </div>
-            <div className="w-full bg-black/40 rounded-full h-3 overflow-hidden border border-white/5">
-              <div 
-                className="bg-gradient-to-r from-purple-500 to-blue-500 h-full transition-all duration-300 ease-out rounded-full shadow-[0_0_15px_rgba(168,85,247,0.6)]" 
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
+          <button 
+            onClick={() => login()}
+            disabled={!source || !dest || isProcessing}
+            className="w-full bg-white text-slate-900 hover:bg-slate-200 hover:scale-[1.02] active:scale-[0.98] font-extrabold text-2xl py-5 px-6 rounded-2xl transition-all disabled:bg-white/20 disabled:text-white/40 disabled:hover:scale-100 disabled:cursor-not-allowed mt-8 shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+          >
+            {isProcessing ? 'Processing Request...' : 'Get started'}
+          </button>
+          
+          <div className="flex items-center justify-center gap-2 text-base text-slate-400 font-medium pt-4">
+            <svg width="20" height="20" className="text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            Secure OAuth 2.0 connection
           </div>
-        </section>
-      </div>
-    </>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
+          <div className="flex justify-between text-base font-bold text-slate-400 mb-4 uppercase tracking-wider">
+            <span>Status: <span className="text-white">{statusMessage}</span></span>
+            {isProcessing && <span>{progress}%</span>}
+          </div>
+          <div className="w-full bg-black/50 rounded-full h-4 overflow-hidden border border-white/5">
+            <div 
+              className="bg-gradient-to-r from-purple-500 to-blue-500 h-full transition-all duration-300 ease-out rounded-full shadow-[0_0_15px_rgba(168,85,247,0.6)]" 
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
