@@ -168,14 +168,17 @@ export default function HomePage() {
 
             {/* KHU VỰC NÚT DONATE SẼ XUẤT HIỆN KHI PROGRESS = 100 */}
             {progress === 100 && (
-              <div className="mt-10 flex flex-col items-center justify-center space-y-4 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
+              <div className="mt-10 flex flex-col items-center justify-center space-y-4 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards] w-full">
                 <p className="text-sm text-pink-300/90 font-medium text-center">
                   If this tool saved you time, consider fueling our journey! ☕
                 </p>
                 
-                {/* Đã thêm min-w-[300px] và w-full để chống ép dẹp khung PayPal */}
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 shadow-xl backdrop-blur-md min-w-[300px] sm:min-w-[350px] flex justify-center items-center">
-                  <div id="paypal-container-T2Z2WJJWTCJHL" className="w-full flex justify-center"></div>
+                {/* Khung viền: Cấp chiều rộng tối đa 400px và căn giữa (mx-auto) */}
+                <div className="p-6 bg-white/5 rounded-2xl border border-white/10 shadow-xl backdrop-blur-md w-full max-w-[400px] mx-auto">
+                  
+                  {/* Thẻ chứa PayPal: Để trống hoàn toàn các class dàn trang (flex/grid) để bảo toàn cấu trúc HTML của PayPal */}
+                  <div id="paypal-container-T2Z2WJJWTCJHL" className="w-full"></div>
+                  
                 </div>
               </div>
             )}
