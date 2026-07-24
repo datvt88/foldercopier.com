@@ -117,6 +117,15 @@ export default function HomePage() {
             <svg width="20" height="20" className="text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             Secure OAuth 2.0 connection
           </div>
+
+          {/* PHẦN LƯU Ý MỚI ĐƯỢC THÊM VÀO */}
+          <div className="mt-3 px-4 text-center">
+            <p className="text-xs text-gray-400/80 leading-relaxed">
+              <span className="font-semibold text-gray-300">Note:</span> Granting write permission to your Google Drive is required to copy files. We strictly do not store any of your personal data or files on our servers.
+            </p>
+          </div>
+          {/* KẾT THÚC PHẦN LƯU Ý */}
+
         </div>
 
         <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
