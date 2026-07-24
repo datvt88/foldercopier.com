@@ -172,8 +172,10 @@ export default function HomePage() {
                 <p className="text-sm text-pink-300/90 font-medium text-center">
                   If this tool saved you time, consider fueling our journey! ☕
                 </p>
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 shadow-xl backdrop-blur-md">
-                  <div id="paypal-container-T2Z2WJJWTCJHL"></div>
+                
+                {/* Đã thêm min-w-[300px] và w-full để chống ép dẹp khung PayPal */}
+                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 shadow-xl backdrop-blur-md min-w-[300px] sm:min-w-[350px] flex justify-center items-center">
+                  <div id="paypal-container-T2Z2WJJWTCJHL" className="w-full flex justify-center"></div>
                 </div>
               </div>
             )}
