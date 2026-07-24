@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import Script from 'next/script'; // Component tối ưu script của Next.js
 
 export default function HomePage() {
   const [source, setSource] = useState('');
@@ -67,34 +66,10 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [taskId, backendUrl]);
 
-  // Hook Render nút PayPal khi Progress đạt 100%
-  useEffect(() => {
-    if (progress === 100) {
-      // Dùng setTimeout nhỏ để đảm bảo thẻ div đã được render vào DOM
-      const timer = setTimeout(() => {
-        const paypalContainer = document.getElementById("paypal-container-T2Z2WJJWTCJHL");
-        const windowAny = window as any; // Tránh lỗi TypeScript
-        
-        // Kiểm tra xem script paypal đã tải xong và container chưa có nút nào
-        if (windowAny.paypal && paypalContainer && paypalContainer.innerHTML === "") {
-          windowAny.paypal.HostedButtons({
-            hostedButtonId: "T2Z2WJJWTCJHL"
-          }).render("#paypal-container-T2Z2WJJWTCJHL");
-        }
-      }, 200);
-      return () => clearTimeout(timer);
-    }
-  }, [progress]);
+  // ĐÃ XÓA: useEffect của thẻ nhúng PayPal JS SDK vì không còn cần thiết
 
   return (
     <>
-      {/* Script PayPal được nạp ngầm, không làm chậm tốc độ load web */}
-      <Script
-        src="https://www.paypal.com/sdk/js?client-id=BAAAX42APoWnZU-5uKAPxIylxLazAIleS0jia5znkMfgJStp5gPOlVKDa7ts9rTAImpb7E-qHIlMVOur9Q&components=hosted-buttons&disable-funding=venmo&currency=USD"
-        strategy="lazyOnload"
-        crossOrigin="anonymous"
-      />
-
       <div className="max-w-5xl mx-auto px-4 py-16 sm:py-24 lg:px-8 space-y-16">
         <header className="text-center space-y-8">
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
@@ -166,20 +141,30 @@ export default function HomePage() {
               ></div>
             </div>
 
-            {/* KHU VỰC NÚT DONATE SẼ XUẤT HIỆN KHI PROGRESS = 100 */}
+            {/* KHU VỰC NÚT DONATE TỐI ƯU MỚI */}
             {progress === 100 && (
-              <div className="mt-10 flex flex-col items-center justify-center space-y-4 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards] w-full">
-                <p className="text-sm text-pink-300/90 font-medium text-center">
-                  If this tool saved you time, consider fueling our journey! ☕
+              <div className="mt-12 flex flex-col items-center justify-center space-y-5 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
+                <p className="text-base text-pink-300/90 font-medium text-center">
+                  If this tool saved you time, consider fueling our journey!
                 </p>
                 
-                {/* Khung viền: Cấp chiều rộng tối đa 400px và căn giữa (mx-auto) */}
-                <div className="p-6 bg-white/5 rounded-2xl border border-white/10 shadow-xl backdrop-blur-md w-full max-w-[400px] mx-auto">
+                {/* Nút Buy Me A Coffee thay thế form nhúng */}
+                <a 
+                  href="https://www.paypal.com/donate/?hosted_button_id=T2Z2WJJWTCJHL" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group flex flex-col items-center gap-3"
+                >
+                  <div className="bg-[#FFDD00] text-black font-extrabold text-xl sm:text-2xl py-4 px-10 rounded-2xl shadow-[0_0_20px_rgba(255,221,0,0.2)] hover:shadow-[0_0_35px_rgba(255,221,0,0.4)] transform transition-all duration-300 hover:-translate-y-1 active:translate-y-0 flex items-center gap-3">
+                    <span className="text-2xl sm:text-3xl">☕</span>
+                    Buy Me A Coffee
+                  </div>
                   
-                  {/* Thẻ chứa PayPal: Để trống hoàn toàn các class dàn trang (flex/grid) để bảo toàn cấu trúc HTML của PayPal */}
-                  <div id="paypal-container-T2Z2WJJWTCJHL" className="w-full"></div>
-                  
-                </div>
+                  {/* Chữ Powered by PayPal */}
+                  <div className="text-sm text-slate-400 font-medium flex items-center gap-1.5 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                    Powered by <span className="font-bold text-white italic">PayPal</span>
+                  </div>
+                </a>
               </div>
             )}
             
