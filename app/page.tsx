@@ -38,6 +38,22 @@ export default function HomePage() {
     }
   });
 
+  // --- HÀM MỚI: Xử lý click 'Get started' kết hợp đo lường Google Ads ---
+  const handleGetStarted = () => {
+    // 1. Bắn tín hiệu Conversion về Google Ads ẩn dưới nền
+    if (typeof window !== 'undefined') {
+      const windowAny = window as any;
+      if (windowAny.gtag) {
+        windowAny.gtag('event', 'conversion', {
+          'send_to': 'AW-18138294141/D0PGCLWLsqgcEP3OgclD'
+        });
+      }
+    }
+    
+    // 2. Kích hoạt luồng đăng nhập Google như bình thường
+    login();
+  };
+
   // Gọi API để check tiến độ copy
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -67,20 +83,18 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [taskId, backendUrl]);
 
-  // Hook Render nút PayPal thông minh hơn (Đảm bảo script load xong mới render)
+  // Hook Render nút PayPal thông minh hơn
   useEffect(() => {
     if (progress === 100) {
       const checkAndRenderPayPal = () => {
         const paypalContainer = document.getElementById("paypal-container-T2Z2WJJWTCJHL");
         const windowAny = window as any; 
         
-        // Kiểm tra thư viện SDK đã sẵn sàng và container rỗng
         if (windowAny.paypal && windowAny.paypal.HostedButtons && paypalContainer && paypalContainer.innerHTML === "") {
           windowAny.paypal.HostedButtons({
             hostedButtonId: "T2Z2WJJWTCJHL"
           }).render("#paypal-container-T2Z2WJJWTCJHL");
         } 
-        // Nếu SDK chưa tải xong, thử lại sau 0.5s
         else if (!windowAny.paypal && paypalContainer) {
           setTimeout(checkAndRenderPayPal, 500);
         }
@@ -151,8 +165,9 @@ export default function HomePage() {
               />
             </div>
 
+            {/* ĐÃ THAY ĐỔI: Sử dụng hàm handleGetStarted thay vì login() trực tiếp */}
             <button 
-              onClick={() => login()}
+              onClick={handleGetStarted}
               disabled={!source || !dest || isProcessing}
               className="w-full bg-white text-slate-900 hover:bg-slate-200 hover:scale-[1.02] active:scale-[0.98] font-extrabold text-2xl py-5 px-6 rounded-2xl transition-all disabled:bg-white/20 disabled:text-white/40 disabled:hover:scale-100 disabled:cursor-not-allowed mt-8 shadow-[0_0_30px_rgba(255,255,255,0.15)]"
             >
@@ -191,10 +206,6 @@ export default function HomePage() {
                   If this tool saved you time, consider fueling our journey! ☕
                 </p>
                 
-                {/* 
-                  SỬ DỤNG CSS CÁCH LY [&_input]:!text-slate-900 
-                  Lệnh này can thiệp trực tiếp vào HTML của PayPal để bẻ gãy nền tối và hiển thị rõ số tiền màu đen. 
-                */}
                 <div className="p-6 bg-white/5 rounded-2xl border border-white/10 shadow-xl backdrop-blur-md w-full max-w-[400px] mx-auto [&_input]:!text-slate-900 [&_input]:!bg-white [&_input]:!font-bold">
                   <div id="paypal-container-T2Z2WJJWTCJHL" className="w-full"></div>
                 </div>
