@@ -92,6 +92,20 @@ export default function HomePage() {
 
   return (
     <>
+      {/* 🚀 Tối ưu SEO & Tốc độ: Google Ads Tag được nạp bất đồng bộ sau khi trang đã render xong */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=AW-18138294141"
+        strategy="afterInteractive"
+      />
+      <Script id="google-ads-tag" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-18138294141');
+        `}
+      </Script>
+
       {/* Script chuẩn từ PayPal */}
       <Script
         src="https://www.paypal.com/sdk/js?client-id=BAAAX42APoWnZU-5uKAPxIylxLazAIleS0jia5znkMfgJStp5gPOlVKDa7ts9rTAImpb7E-qHIlMVOur9Q&components=hosted-buttons&disable-funding=venmo&currency=USD"
