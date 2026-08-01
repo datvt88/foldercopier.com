@@ -13,6 +13,10 @@ export default function NavBar() {
           </Link>
           <div className="flex items-center space-x-4 md:space-x-8 text-sm font-medium text-slate-300 mt-2 md:mt-0 overflow-x-auto">
             <Link href="/" className="hover:text-white transition-colors whitespace-nowrap">Drive Tool</Link>
+            
+            {/* THÊM MỚI: Nút điều hướng sang trang Transfer Ownership */}
+            <Link href="/transfer-ownership" className="hover:text-white transition-colors whitespace-nowrap text-purple-400">Transfer Owner</Link>
+            
             <Link href="/duplicate-google-photos" className="hover:text-white transition-colors whitespace-nowrap">Photos Guide</Link>
             
             <Link href="/about" className="relative inline-flex items-center justify-center p-[1.5px] rounded-full overflow-hidden group">
