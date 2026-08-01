@@ -1,0 +1,171 @@
+'use client';
+import { useState, useEffect } from 'react';
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+import Script from 'next/script';
+
+export default function TransferOwnershipPage() {
+  const [targetLink, setTargetLink] = useState('');
+  const [newOwnerEmail, setNewOwnerEmail] = useState('');
+  const [taskId, setTaskId] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [statusMessage, setStatusMessage] = useState('Ready to transfer');
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  const login = useGoogleLogin({
+    flow: 'auth-code',
+    scope: 'https://www.googleapis.com/auth/drive',
+    onSuccess: async (codeResponse) => {
+      setStatusMessage('Authenticating and initializing...');
+      setIsProcessing(true);
+      try {
+        const res = await axios.post(`${backendUrl}/api/transfer`, {
+          target_link: targetLink,
+          new_owner_email: newOwnerEmail,
+          auth_code: codeResponse.code,
+        });
+        setTaskId(res.data.task_id);
+      } catch (err: any) {
+        setStatusMessage(err.response?.data?.detail || 'Connection error. Please try again.');
+        setIsProcessing(false);
+      }
+    },
+    onError: () => {
+      setStatusMessage('Authentication canceled by user.');
+      setIsProcessing(false);
+    }
+  });
+
+  const handleGetStarted = () => {
+    // Kích hoạt Conversion Tracking cho Google Ads
+    if (typeof window !== 'undefined') {
+      const windowAny = window as any;
+      if (windowAny.gtag) {
+        windowAny.gtag('event', 'conversion', {
+          'send_to': 'AW-18138294141/D0PGCLWLsqgcEP3OgclD'
+        });
+      }
+    }
+    login();
+  };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (taskId) {
+      interval = setInterval(async () => {
+        try {
+          const res = await axios.get(`${backendUrl}/api/status/${taskId}`);
+          const { status, info } = res.data;
+          if (status === 'PROGRESS') {
+            setProgress(info.progress || 0);
+            setStatusMessage(info.message || 'Processing task...');
+          } else if (status === 'SUCCESS') {
+            setProgress(100);
+            setStatusMessage(info.message || 'COMPLETED SUCCESSFULLY!');
+            setIsProcessing(false);
+            clearInterval(interval);
+          } else if (status === 'FAILURE') {
+            setStatusMessage(`Error: ${info.error || 'System failure'}`);
+            setIsProcessing(false);
+            clearInterval(interval);
+          }
+        } catch (error) {
+          console.error("Status check failed.");
+        }
+      }, 2000);
+    }
+    return () => clearInterval(interval);
+  }, [taskId, backendUrl]);
+
+  return (
+    <>
+      <title>Transfer Google Drive Folder Ownership | FolderCopier</title>
+      
+      <Script src="https://www.googletagmanager.com/gtag/js?id=AW-18138294141" strategy="afterInteractive" />
+      <Script id="google-ads-tag" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-18138294141');
+        `}
+      </Script>
+
+      <div className="max-w-5xl mx-auto px-4 py-16 sm:py-24 lg:px-8 space-y-16">
+        <header className="text-center space-y-8">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
+            Transfer Ownership. <br className="hidden md:block" /> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Made easy.</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto font-medium">
+            Instantly transfer the ownership of your Google Docs and Folders to another Google account seamlessly.
+          </p>
+        </header>
+
+        <section className="bg-white/5 backdrop-blur-2xl p-8 md:p-14 rounded-[2.5rem] shadow-2xl border border-white/10 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[150%] bg-blue-500/10 blur-[120px] pointer-events-none"></div>
+
+          <div className="space-y-8 relative z-10">
+            <div>
+              <label className="block text-lg font-semibold text-slate-200 mb-3">Google Doc / Folder URL</label>
+              <input 
+                type="text"
+                className="w-full bg-black/40 border border-white/20 text-white placeholder-slate-500 p-5 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-lg md:text-xl backdrop-blur-sm shadow-inner"
+                placeholder="https://drive.google.com/drive/folders/..." 
+                value={targetLink}
+                onChange={(e) => setTargetLink(e.target.value)}
+                disabled={isProcessing}
+              />
+            </div>
+            <div>
+              <label className="block text-lg font-semibold text-slate-200 mb-3">New Owner Email Address</label>
+              <input 
+                type="email"
+                className="w-full bg-black/40 border border-white/20 text-white placeholder-slate-500 p-5 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-lg md:text-xl backdrop-blur-sm shadow-inner"
+                placeholder="example@gmail.com" 
+                value={newOwnerEmail}
+                onChange={(e) => setNewOwnerEmail(e.target.value)}
+                disabled={isProcessing}
+              />
+            </div>
+
+            <button 
+              onClick={handleGetStarted}
+              disabled={!targetLink || !newOwnerEmail || isProcessing}
+              className="w-full bg-white text-slate-900 hover:bg-slate-200 hover:scale-[1.02] active:scale-[0.98] font-extrabold text-2xl py-5 px-6 rounded-2xl transition-all disabled:bg-white/20 disabled:text-white/40 disabled:hover:scale-100 disabled:cursor-not-allowed mt-8 shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+            >
+              {isProcessing ? 'Processing Request...' : 'Transfer Ownership'}
+            </button>
+            
+            <div className="flex items-center justify-center gap-2 text-base text-slate-400 font-medium pt-4">
+              <svg width="20" height="20" className="text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              Secure OAuth 2.0 connection
+            </div>
+
+            <div className="mt-3 px-4 text-center">
+              <p className="text-xs text-gray-400/80 leading-relaxed">
+                <span className="font-semibold text-gray-300">Note:</span> Granting permissions is required. We strictly do not store any of your personal data or files. Workspace accounts may only allow transfers within the same domain.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
+            <div className="flex justify-between text-base font-bold text-slate-400 mb-4 uppercase tracking-wider">
+              <span>Status: <span className="text-white">{statusMessage}</span></span>
+              {isProcessing && <span>{progress}%</span>}
+            </div>
+            
+            <div className="w-full bg-black/50 rounded-full h-4 overflow-hidden border border-white/5">
+              <div 
+                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-full transition-all duration-300 ease-out rounded-full shadow-[0_0_15px_rgba(59,130,246,0.6)]" 
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}
