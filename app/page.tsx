@@ -165,7 +165,6 @@ export default function HomePage() {
               />
             </div>
 
-            {/* ĐÃ THAY ĐỔI: Sử dụng hàm handleGetStarted thay vì login() trực tiếp */}
             <button 
               onClick={handleGetStarted}
               disabled={!source || !dest || isProcessing}
@@ -184,6 +183,18 @@ export default function HomePage() {
                 <span className="font-semibold text-gray-300">Note:</span> Granting write permission to your Google Drive is required to copy files. We strictly do not store any of your personal data or files on our servers.
               </p>
             </div>
+
+            {/* KHU VỰC HƯỚNG DẪN MỚI THÊM */}
+            <div className="mt-4 p-5 bg-black/20 rounded-xl border border-white/5 text-sm text-slate-300">
+              <p className="font-bold text-white mb-2">Authorization Guide:</p>
+              <ul className="space-y-1.5 list-disc list-inside text-gray-400/90 text-sm">
+                <li>Click <strong className="text-slate-200">Get started</strong>.</li>
+                <li><strong className="text-slate-200">Step 1:</strong> Choose your login account (the account for the destination folder).</li>
+                <li><strong className="text-slate-200">Step 2:</strong> Click <strong>Advanced</strong> &rarr; Go to foldercopier.com.</li>
+                <li><strong className="text-slate-200">Step 3:</strong> Check the box to grant permission to copy files into your folder.</li>
+              </ul>
+            </div>
+
           </div>
 
           <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
