@@ -149,6 +149,18 @@ export default function TransferOwnershipPage() {
                 <span className="font-semibold text-gray-300">Note:</span> Granting permissions is required. We strictly do not store any of your personal data or files. Workspace accounts may only allow transfers within the same domain.
               </p>
             </div>
+
+            {/* Authorization Guide Box */}
+            <div className="mt-4 p-5 bg-black/20 rounded-xl border border-white/5 text-sm text-slate-300">
+              <p className="font-bold text-white mb-2">Authorization Guide:</p>
+              <ul className="space-y-1.5 list-disc list-inside text-gray-400/90 text-sm">
+                <li>Click <strong className="text-slate-200">Transfer Ownership</strong>.</li>
+                <li><strong className="text-slate-200">Step 1:</strong> Choose your login account (the account that currently owns the folder/file).</li>
+                <li><strong className="text-slate-200">Step 2:</strong> Click <strong>Advanced</strong> &rarr; Go to foldercopier.com.</li>
+                <li><strong className="text-slate-200">Step 3:</strong> Check the box to grant permission to transfer ownership.</li>
+              </ul>
+            </div>
+            
           </div>
 
           <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
